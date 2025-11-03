@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tab-content { padding: 20px 0; }
+        .doctor-card { margin-bottom: 15px; }
+        .appointment-list { max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Patient Management System</h1>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button">Appointments</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="doctors-tab" data-bs-toggle="tab" data-bs-target="#doctors" type="button">Find Doctors</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="records-tab" data-bs-toggle="tab" data-bs-target="#records" type="button">Medical Records</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button">My Profile</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="myTabContent">
+            
+            <!-- Appointments Tab -->
+            <div class="tab-pane fade show active" id="appointments" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Request Appointment</h3>
+                        <form id="appointmentForm">
+                            <div class="mb-3">
+                                <label class="form-label">Patient ID</label>
+                                <input type="number" class="form-control" id="patientId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Doctor</label>
+                                <select class="form-control" id="doctorSelect" required>
+                                    <option value="">Select Doctor</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date and Time</label>
+                                <input type="datetime-local" class="form-control" id="appointmentDateTime" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Request Appointment</button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>My Appointments</h3>
+                        <div class="appointment-list" id="appointmentList">
+                            <!-- Appointments will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctors Tab -->
+            <div class="tab-pane fade" id="doctors" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>Find Doctors</h3>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by name, specialization, qualifications...">
+                        </div>
+                        <button class="btn btn-primary" onclick="smartSearch()">Smart Search</button>
+                        <hr>
+                        <h5>Filter by Specialization</h5>
+                        <div class="list-group">
+                            <button class="list-group-item list-group-item-action" onclick="filterBySpecialization('Cardiology')">Cardiology</button>
+                            <button class="list-group-item list-group-item-action" onclick="filterBySpecialization('Dermatology')">Dermatology</button>
+                            <button class="list-group-item list-group-item-action" onclick="filterBySpecialization('Neurology')">Neurology</button>
+                            <button class="list-group-item list-group-item-action" onclick="filterBySpecialization('')">All Specializations</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h3>Available Doctors</h3>
+                        <div id="doctorsList">
+                            <!-- Doctors will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical Records Tab -->
+            <div class="tab-pane fade" id="records" role="tabpanel">
+                <h3>Medical Records</h3>
+                <div class="mb-3">
+                    <label class="form-label">Patient ID</label>
+                    <input type="number" class="form-control" id="recordsPatientId" style="width: 200px;">
+                    <button class="btn btn-primary mt-2" onclick="loadMedicalRecords()">Load Records</button>
+                </div>
+                <div id="medicalRecords">
+                    <!-- Medical records will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div class="tab-pane fade" id="profile" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Update Personal Information</h3>
+                        <form id="profileForm">
+                            <div class="mb-3">
+                                <label class="form-label">Patient ID</label>
+                                <input type="number" class="form-control" id="updatePatientId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
