@@ -190,3 +190,72 @@ async function loadMedicalHistory(patientId) {
 ```
 
 That's it! Your frontend should work seamlessly with these APIs. Start with the sample IDs provided and you'll see immediate results! 🚀
+
+## 🚀 API Documentation for Doctors
+
+### Base URL: `http://localhost:8080/api/doctor/{doctorId}`
+
+### 1. View Appointments
+```
+GET /{doctorId}/appointments
+```
+
+### 2. View Patient Records
+```
+GET /{doctorId}/patients/{patientId}/records
+```
+
+### 3. Complete Patient History
+```
+GET /{doctorId}/patients/{patientId}/history
+```
+
+### 4. Smart Search
+```
+GET /{doctorId}/search/patients?query=john
+```
+
+### 5. Add Diagnosis
+```
+POST /{doctorId}/patients/{patientId}/diagnosis
+Body: {
+  "diagnosisCode": "I10",
+  "diagnosisName": "Hypertension",
+  "description": "High blood pressure"
+}
+```
+
+### 6. Prescribe Medicine
+```
+POST /{doctorId}/patients/{patientId}/prescription
+Body: {
+  "medicineName": "Lisinopril",
+  "dosage": "10mg",
+  "frequency": "Once daily",
+  "durationDays": 30,
+  "instructions": "Take in morning"
+}
+```
+
+### 7. Get Doctor's Patients
+```
+GET /{doctorId}/patients
+```
+
+---
+
+## 🎯 Testing Instructions
+
+1. **Start the backend** (runs on port 8080)
+2. **Open `doctor-dashboard.html`** in browser
+3. **Use Doctor ID**: 1, 2, or 3 (sample data pre-loaded)
+4. **Test with Patient IDs**: 1 or 2
+
+### Sample Test Flow:
+1. Click "My Appointments" - see doctor's scheduled appointments
+2. Click "My Patients" - see all patients with appointments
+3. Use "Search Patients" - find patients by name/email
+4. Click "View Complete History" - see full patient medical history
+5. Use "Add Diagnosis" and "Prescribe Medicine" - add new records
+
+The system now supports all doctor functionalities on top of the existing patient system! 🎉

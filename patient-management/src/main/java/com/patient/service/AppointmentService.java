@@ -32,6 +32,10 @@ public class AppointmentService {
         return appointmentRepository.findByPatientId(patientId);
     }
 
+    public List<Appointment> getAppointmentsByDoctorId(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+
     public Appointment createAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         Optional<Patient> patient = patientService.getPatientById(appointmentRequestDTO.getPatientId());
         Optional<Doctor> doctor = doctorService.getDoctorById(appointmentRequestDTO.getDoctorId());

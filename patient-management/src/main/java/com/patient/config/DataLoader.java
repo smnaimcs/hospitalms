@@ -1,13 +1,24 @@
 package com.patient.config;
 
-import com.patient.model.*;
-import com.patient.repository.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.doctor.model.Diagnosis;
+import com.doctor.model.Prescription;
+import com.doctor.repository.DiagnosisRepository;
+import com.doctor.repository.PrescriptionRepository;
+import com.patient.model.Appointment;
+import com.patient.model.Doctor;
+import com.patient.model.MedicalRecord;
+import com.patient.model.Patient;
+import com.patient.repository.AppointmentRepository;
+import com.patient.repository.DoctorRepository;
+import com.patient.repository.MedicalRecordRepository;
+import com.patient.repository.PatientRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -23,6 +34,12 @@ public class DataLoader implements CommandLineRunner {
     
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
+
+    @Autowired
+    private DiagnosisRepository diagnosisRepository;
+
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
     
     @Override
     public void run(String... args) throws Exception {
@@ -64,5 +81,22 @@ public class DataLoader implements CommandLineRunner {
         
         medicalRecordRepository.save(record1);
         medicalRecordRepository.save(record2);
+
+        // Add to DataLoader
+        Diagnosis diagnosis1 = new Diagnosis("I10", "Essential hypertension", 
+            "Primary high blood pressure", LocalDateTime.now().minusMonths(1), patient1, doctor1);
+        Diagnosis diagnosis2 = new Diagnosis("L20", "Atopic dermatitis", 
+            "Chronic inflammatory skin condition", LocalDateTime.now().minusWeeks(2), patient2, doctor2);
+
+        diagnosisRepository.save(diagnosis1);
+        diagnosisRepository.save(diagnosis2);
+
+        Prescription prescription1 = new Prescription("Lisinopril", "10mg", "Once daily", 30, 
+            "Take in the morning", LocalDateTime.now().minusMonths(1), patient1, doctor1);
+        Prescription prescription2 = new Prescription("Hydrocortisone cream", "1%", "Twice daily", 14, 
+            "Apply to affected areas", LocalDateTime.now().minusWeeks(2), patient2, doctor2);
+
+        prescriptionRepository.save(prescription1);
+        prescriptionRepository.save(prescription2);
     }
 }

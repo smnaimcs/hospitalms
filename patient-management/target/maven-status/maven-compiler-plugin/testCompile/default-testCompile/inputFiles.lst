@@ -1,0 +1,10 @@
+/home/smnaim/project/patient-management/src/test/java/com/patient/repository/PatientRepositoryTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/TestSuite.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/service/PatientServiceTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/service/DiagnosisServiceTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/controller/DoctorDashboardControllerIntegrationTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/service/DoctorServiceTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/PatientManagementE2ETest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/controller/PatientControllerIntegrationTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/service/AppointmentServiceTest.java
+/home/smnaim/project/patient-management/src/test/java/com/patient/service/PrescriptionServiceTest.java

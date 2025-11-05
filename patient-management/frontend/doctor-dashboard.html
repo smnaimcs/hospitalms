@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .dashboard-section { margin-bottom: 30px; }
+        .patient-card { cursor: pointer; transition: transform 0.2s; }
+        .patient-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .sidebar { background: #f8f9fa; min-height: 100vh; }
+        .nav-link { color: #495057; font-weight: 500; }
+        .nav-link.active { background-color: #007bff; color: white; }
+        .search-highlight { background-color: yellow; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-md fa-2x text-primary mb-2"></i>
+                        <h4>Doctor Dashboard</h4>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Doctor ID</strong></label>
+                        <input type="number" class="form-control" id="doctorId" value="1">
+                    </div>
+                    
+                    <hr>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('appointments')">
+                                <i class="fas fa-calendar-alt me-2"></i>My Appointments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('patients')">
+                                <i class="fas fa-users me-2"></i>My Patients
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('search')">
+                                <i class="fas fa-search me-2"></i>Smart Search
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('today')">
+                                <i class="fas fa-clock me-2"></i>Today's Schedule
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Dashboard Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 id="sectionTitle">Dashboard Overview</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dashboard Stats Section -->
+                <div id="dashboardSection" class="dashboard-section">
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="card-title">Appointments</h5>
+                                            <h2 id="statsAppointments" class="mb-0">0</h2>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fas fa-calendar-alt fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="card-title">Patients</h5>
+                                            <h2 id="statsPatients" class="mb-0">0</h2>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fas fa-users fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="card-title">Diagnoses</h5>
+                                            <h2 id="statsDiagnoses" class="mb-0">0</h2>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fas fa-stethoscope fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="card-title">Prescriptions</h5>
+                                            <h2 id="statsPrescriptions" class="mb-0">0</h2>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fas fa-prescription fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <button class="btn btn-primary w-100" onclick="showSection('today')">
+                                                <i class="fas fa-clock me-2"></i>Today's Schedule
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <button class="btn btn-success w-100" onclick="showSection('patients')">
+                                                <i class="fas fa-user-plus me-2"></i>View Patients
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <button class="btn btn-info w-100" onclick="showSection('search')">
+                                                <i class="fas fa-search me-2"></i>Smart Search
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <button class="btn btn-warning w-100" onclick="loadDoctorAppointments()">
+                                                <i class="fas fa-calendar me-2"></i>All Appointments
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Appointments Section -->
+                <div id="todaySection" class="dashboard-section" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">Today's Appointments</h5>
+                                    <span class="badge bg-primary" id="todayAppointmentsCount">0</span>
+                                </div>
+                                <div class="card-body">
+                                    <div id="todayAppointmentsList">
+                                        <!-- Today's appointments will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appointments Section -->
+                <div id="appointmentsSection" class="dashboard-section" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">All Appointments</h5>
+                                    <button class="btn btn-primary btn-sm" onclick="loadDoctorAppointments()">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="appointmentsList">
+                                        <!-- Appointments will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patients Section -->
+                <div id="patientsSection" class="dashboard-section" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">My Patients</h5>
+                                    <button class="btn btn-primary btn-sm" onclick="loadDoctorPatients()">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="patientsList">
+                                        <!-- Patients will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Search Section -->
+                <div id="searchSection" class="dashboard-section" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Smart Search</h5>
+                                    <p class="text-muted mb-0">Search across patients, diagnoses, and prescriptions</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-4">
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="searchQuery" 
+                                                       placeholder="Search patients, diagnoses, medicines...">
+                                                <button class="btn btn-primary" onclick="smartSearch()">
+                                                    <i class="fas fa-search"></i> Search
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-select" id="searchType">
+                                                <option value="all">All Categories</option>
+                                                <option value="patients">Patients Only</option>
+                                                <option value="diagnoses">Diagnoses Only</option>
+                                                <option value="prescriptions">Prescriptions Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Search Results</h6>
+                                            <div id="searchResults" style="max-height: 500px; overflow-y: auto;">
+                                                <!-- Search results will be loaded here -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="searchDetail">
+                                                <!-- Detailed view will be shown here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="patientHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complete Patient History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="patientHistoryContent">
+                    <!-- Patient history will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addDiagnosisModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Diagnosis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="diagnosisForm">
+                        <input type="hidden" id="diagnosisPatientId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Diagnosis Code *</label>
+                                    <input type="text" class="form-control" id="diagnosisCode" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Diagnosis Name *</label>
+                                    <input type="text" class="form-control" id="diagnosisName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="diagnosisDescription" rows="3" 
+                                      placeholder="Detailed description of the diagnosis..."></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Add Diagnosis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="prescribeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Prescribe Medication</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prescriptionForm">
+                        <input type="hidden" id="prescriptionPatientId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Medicine Name *</label>
+                                    <input type="text" class="form-control" id="medicineName" required 
+                                           placeholder="e.g., Amoxicillin">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Dosage *</label>
+                                    <input type="text" class="form-control" id="dosage" required 
+                                           placeholder="e.g., 500mg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Frequency *</label>
+                                    <input type="text" class="form-control" id="frequency" required 
+                                           placeholder="e.g., Twice daily">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Duration (Days) *</label>
+                                    <input type="number" class="form-control" id="duration" required 
+                                           placeholder="e.g., 7">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Instructions</label>
+                            <textarea class="form-control" id="instructions" rows="3" 
+                                      placeholder="Special instructions for the patient..."></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-prescription me-2"></i>Prescribe Medicine
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/doctor-dashboard.js"></script>
+</body>
+</html>
