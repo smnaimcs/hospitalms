@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: com.patient.AdminIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 10.597 s <<< FAILURE! - in com.patient.AdminIntegrationTest
+login_WithInvalidCredentials_ShouldReturnUnauthorized  Time elapsed: 0.046 s  <<< ERROR!
+org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:39901/api/admin/login": cannot retry due to server authentication, in streaming mode; nested exception is java.net.HttpRetryException: cannot retry due to server authentication, in streaming mode
+	at com.patient.AdminIntegrationTest.login_WithInvalidCredentials_ShouldReturnUnauthorized(AdminIntegrationTest.java:89)
+Caused by: java.net.HttpRetryException: cannot retry due to server authentication, in streaming mode
+	at com.patient.AdminIntegrationTest.login_WithInvalidCredentials_ShouldReturnUnauthorized(AdminIntegrationTest.java:89)
+

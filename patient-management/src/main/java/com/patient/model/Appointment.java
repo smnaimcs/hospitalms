@@ -25,7 +25,9 @@ public class Appointment {
     private Long id;
 
     private LocalDateTime appointmentDateTime;
-    private String status; // SCHEDULED, CANCELLED, COMPLETED
+    
+    @Builder.Default
+    private String status = "REQUESTED"; // REQUESTED, APPROVED, REJECTED, SCHEDULED, CANCELLED, COMPLETED
 
     @ManyToOne
     @JoinColumn(name = "patient_id")

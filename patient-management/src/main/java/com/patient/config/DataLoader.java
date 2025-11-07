@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.admin.model.Admin;
+import com.admin.repository.AdminRepository;
 import com.doctor.model.Diagnosis;
 import com.doctor.model.Prescription;
 import com.doctor.repository.DiagnosisRepository;
@@ -40,6 +42,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
     
     @Override
     public void run(String... args) throws Exception {
@@ -98,5 +103,16 @@ public class DataLoader implements CommandLineRunner {
 
         prescriptionRepository.save(prescription1);
         prescriptionRepository.save(prescription2);
+
+        Admin admin = Admin.builder()
+                .username("admin")
+                .password("admin123") // In production, this should be encrypted
+                .email("admin@hospital.com")
+                .firstName("System")
+                .lastName("Administrator")
+                .active(true)
+                .build();
+        adminRepository.save(admin);
+        System.out.println("Admin account created: username=admin, password=admin123");
     }
 }
